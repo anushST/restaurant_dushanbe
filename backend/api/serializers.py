@@ -51,7 +51,7 @@ class CartSerializer(serializers.ModelSerializer):
         """Meta-data of the CartSerializer class."""
 
         model = Cart
-        fields = ('created_at',)
+        fields = ('created_at', 'items')
 
 
 class CompanyInfoSerializer(serializers.ModelSerializer):
