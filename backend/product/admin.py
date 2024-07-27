@@ -1,3 +1,6 @@
+"""Admin-zone of the product app."""
 from django.contrib import admin
 
-# Register your models here.
+from .models import Category, Dish
+
+admin.site.register((Category, Dish))
