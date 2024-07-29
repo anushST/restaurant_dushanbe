@@ -23,15 +23,15 @@ class Category(models.Model):
 
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
+        ordering = ('id',)
 
 
 class Dish(models.Model):
     """Dish model."""
 
     name = models.CharField('Названия блюда', max_length=100)
-    category = models.ForeignKey(Category, related_name='dishes',
-                                 on_delete=models.CASCADE,
-                                 verbose_name='Категория блюда')
+    category = models.ManyToManyField(Category, related_name='dishes',
+                                      verbose_name='Категория блюда')
     price = models.DecimalField('Цена', max_digits=6, decimal_places=2)
     old_price = models.DecimalField('Цена без скидки', max_digits=6,
                                     decimal_places=2,
@@ -51,3 +51,4 @@ class Dish(models.Model):
 
         verbose_name = 'блюдо'
         verbose_name_plural = 'Блюда'
+        ordering = ('id',)

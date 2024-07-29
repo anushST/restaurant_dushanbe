@@ -1,5 +1,6 @@
 """Serializers of api app."""
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from cart.models import Cart, CartItem
 from order.models import Order
@@ -22,7 +23,7 @@ class DishSerializer(serializers.ModelSerializer):
 
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
-        slug_field='slug')
+        slug_field='slug', many=True)
 
     class Meta:
         """Meta-data of the DishSerializer class."""
@@ -30,28 +31,6 @@ class DishSerializer(serializers.ModelSerializer):
         model = Dish
         fields = ('name', 'category', 'price', 'image', 'is_on_main',
                   'is_new',)
-
-
-class CartItemSerializer(serializers.ModelSerializer):
-    """Cart item serializer."""
-
-    class Meta:
-        """Meta-data of the CartItemSerializer class."""
-
-        model = CartItem
-        fields = ('cart', 'dish', 'quantity',)
-
-
-class CartSerializer(serializers.ModelSerializer):
-    """Cart serializer."""
-
-    items = CartItemSerializer(many=True, read_only=True)
-
-    class Meta:
-        """Meta-data of the CartSerializer class."""
-
-        model = Cart
-        fields = ('created_at', 'items')
 
 
 class CompanyInfoSerializer(serializers.ModelSerializer):
@@ -67,12 +46,34 @@ class CompanyInfoSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     """Order serializer."""
 
-    cart = CartSerializer()
+    dishes = serializers.ListField(required=True)
 
     class Meta:
         """Meta-data of the OrderSerialzer class."""
 
         model = Order
-        fields = ('first_name', 'last_name', 'phone', 'address',
+        fields = ('first_name', 'last_name', 'phone', 'email', 'address',
                   'delivery_address_lat', 'delivery_address_lng',
-                  'cart', 'delivery_type',)
+                  'dishes', 'delivery_type',)
+
+    def create(self, validated_data):
+        """Create Order object."""
+        dishes = validated_data.pop('dishes')
+        cart = Cart.objects.create()
+        order = Order.objects.create(cart=cart, **validated_data)
+
+        if not len(dishes):
+            raise ValidationError('Поле dishes не должно быть пустым')
+        for dish in dishes:
+            if isinstance(dish, dict):
+                try:
+                    CartItem.objects.create(cart=cart, dish_id=dish['dish_id'],
+                                            quantity=dish['quantity'])
+                except KeyError:
+                    raise ValidationError('Внутри объекта в поле dishes '
+                                          'должны '
+                                          'быть два ключа dish_id и quantity')
+            else:
+                raise ValidationError('Неправильно передана поле dishes. '
+                                      'Он должен содержать объекты.')
+        return order

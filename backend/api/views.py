@@ -1,10 +1,10 @@
 """Views of the api app."""
 from rest_framework import viewsets
+from rest_framework.mixins import CreateModelMixin
 
-from .serializers import (CartSerializer, CategorySerializer,
+from .serializers import (CategorySerializer,
                           CompanyInfoSerializer, DishSerializer,
                           OrderSerializer)
-from cart.models import Cart
 from order.models import Order
 from product.models import Category, Dish
 from restaurant.models import CompanyInfo
@@ -17,12 +17,24 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
     lookup_field = 'slug'
 
+    def get_queryset(self):
+        """Return queryset to work with."""
+        queryset = super().get_queryset()
+        filters = self.request.query_params.get('filters')
+        if filters:
+            filters_list = filters.split(',')
+            for filter in filters_list:
+                if filter == 'main':
+                    queryset = queryset.filter(is_on_main=True)
+        return queryset
+
 
 class CompanyInfoViewSet(viewsets.ReadOnlyModelViewSet):
     """Comapny info viewset."""
 
     queryset = CompanyInfo.objects.all()
     serializer_class = CompanyInfoSerializer
+    pagination_class = None
 
 
 class DishViewSet(viewsets.ReadOnlyModelViewSet):
@@ -31,15 +43,21 @@ class DishViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
 
+    def get_queryset(self):
+        """Return queryset to work with."""
+        queryset = super().get_queryset()
+        filters = self.request.query_params.get('filters')
+        if filters:
+            filters_list = filters.split(',')
+            for filter in filters_list:
+                if filter == 'main':
+                    queryset = queryset.filter(is_on_main=True)
+                if filter == 'new':
+                    queryset = queryset.filter(is_new=True)
+        return queryset
 
-class CartViewSet(viewsets.ModelViewSet):
-    """Cart viewset."""
 
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-
-
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(CreateModelMixin, viewsets.GenericViewSet):
     """Order viewset."""
 
     queryset = Order.objects.all()

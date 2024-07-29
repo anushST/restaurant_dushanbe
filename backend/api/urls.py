@@ -6,15 +6,14 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from .constants import API_VERSION
-from .views import (CategoryViewSet, CartViewSet, CompanyInfoViewSet,
-                    DishViewSet, OrderViewSet)
+from .views import (CategoryViewSet, CompanyInfoViewSet, DishViewSet,
+                    OrderViewSet)
 
 router = DefaultRouter()
-router.register(r'categories', CategoryViewSet)
-router.register(r'dishes', DishViewSet)
-router.register(r'carts', CartViewSet)
-router.register(r'orders', OrderViewSet)
-router.register(r'company_info', CompanyInfoViewSet)
+router.register(r'categories', CategoryViewSet, basename='categories')
+router.register(r'dishes', DishViewSet, basename='dishes')
+router.register(r'orders', OrderViewSet, basename='orders')
+router.register(r'company_info', CompanyInfoViewSet, basename='company_info')
 
 urlpatterns = [
     path(f'{API_VERSION}/', include(router.urls)),

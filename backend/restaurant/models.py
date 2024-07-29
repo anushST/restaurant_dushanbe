@@ -5,18 +5,25 @@ from django.db import models
 class CompanyInfo(models.Model):
     """Company information model."""
 
-    address = models.CharField('Адрес', max_length=255)
-    working_hours = models.CharField('Часы работы', max_length=255)
-    phone = models.CharField('Телефонные номера', max_length=64)
-    delivery_cost = models.CharField('Политика доставки', max_length=512)
-    delivery_time = models.CharField('Время доставки', max_length=100)
-    payment_methods = models.CharField('Способы оплаты', max_length=255)
-    whatsapp_link = models.URLField('Whatsapp ссылка')
-    telegram_link = models.URLField('Telegram ссылка')
-    instagram_link = models.URLField('Instagram ссылка')
+    address = models.TextField('Адрес', max_length=512)
+    working_hours = models.TextField('Часы работы', max_length=512)
+    phones = models.TextField('Телефонные номера', max_length=512)
+    delivery_cost = models.TextField('Политика доставки', max_length=512,
+                                     null=True, blank=True)
+    delivery_time = models.TextField('Время доставки', max_length=512,
+                                     null=True, blank=True)
+    payment_methods = models.TextField('Способы оплаты', max_length=512,
+                                       null=True, blank=True)
+    whatsapp_link = models.URLField('Whatsapp ссылка', null=True,
+                                    blank=True)
+    telegram_link = models.URLField('Telegram ссылка', null=True,
+                                    blank=True)
+    instagram_link = models.URLField('Instagram ссылка', null=True,
+                                     blank=True)
 
     class Meta():
         """Meta-data of the Cart class."""
 
         verbose_name = 'информация о компании'
         verbose_name_plural = 'Информация о компании'
+        ordering = ('id',)

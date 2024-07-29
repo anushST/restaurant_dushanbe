@@ -9,11 +9,16 @@ class Cart(models.Model):
 
     created_at = models.DateTimeField('Время создания', auto_now_add=True)
 
+    def __str__(self):
+        """Return the string when calling str() method on this obj."""
+        return f'Корзина {self.id}'
+
     class Meta():
         """Meta-data of the Cart class."""
 
         verbose_name = 'корзина'
         verbose_name_plural = 'Корзины'
+        ordering = ('id',)
 
 
 class CartItem(models.Model):
