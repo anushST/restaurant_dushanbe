@@ -6,8 +6,8 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from .constants import API_VERSION
-from .views import (CategoryViewSet, CompanyInfoViewSet, DishViewSet,
-                    OrderViewSet)
+from .views.main_views import (CategoryViewSet, CompanyInfoViewSet,
+                               DishViewSet, OrderViewSet)
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet, basename='categories')

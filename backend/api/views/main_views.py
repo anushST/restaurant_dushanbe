@@ -1,10 +1,10 @@
-"""Views of the api app."""
+"""Main views of the api app."""
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin
 
-from .serializers import (CategorySerializer,
-                          CompanyInfoSerializer, DishSerializer,
-                          OrderSerializer)
+from ..serializers import (CategorySerializer, CompanyInfoSerializer,
+                           DishSerializer, OrderSerializer)
 from order.models import Order
 from product.models import Category, Dish
 from restaurant.models import CompanyInfo
@@ -42,11 +42,16 @@ class DishViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
 
     def get_queryset(self):
         """Return queryset to work with."""
         queryset = super().get_queryset()
         filters = self.request.query_params.get('filters')
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(categories__slug=category)
         if filters:
             filters_list = filters.split(',')
             for filter in filters_list:

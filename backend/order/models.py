@@ -30,6 +30,8 @@ class Order(models.Model):
                                 verbose_name='Корзина')
     delivery_type = models.CharField('Тип заказа', max_length=10,
                                      choices=DELIVERY_CHOICES)
+    total_price = models.DecimalField('Общая цена', max_digits=6,
+                                      decimal_places=2)
     is_accepted = models.BooleanField('Прнинято?', default=False)
     is_delivered = models.BooleanField('Доставлено?', default=False)
     dishes = models.TextField('Для работы сериализатора', editable=False)
@@ -42,12 +44,13 @@ class Order(models.Model):
 
     def __str__(self):
         """Return the string when calling str() method on this obj."""
-        return (f'{self.first_name} {self.last_name} ({self.phone}) '
-                f'({self.email})')
+        return (f'{self.first_name} '
+                f'{self.last_name if self.last_name else ""} '
+                f'({self.phone}) ({self.email})')
 
     class Meta():
         """Meta-data of the Order class."""
 
         verbose_name = 'заказ'
-        verbose_name_plural = 'Заказаы'
+        verbose_name_plural = 'Заказы'
         ordering = ('id',)

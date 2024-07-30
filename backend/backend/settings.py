@@ -18,10 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_URLS_REGEX = r'^/api/.*$'
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-]
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -42,6 +39,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'restaurant.apps.RestaurantConfig',
     'order.apps.OrderConfig',
+    'mail.apps.MailConfig',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +127,10 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = BASE_DIR / 'mail' / 'sent_emails'
 
 AUTH_USER_MODEL = 'users.User'
 

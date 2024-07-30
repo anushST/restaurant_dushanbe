@@ -30,9 +30,12 @@ class Dish(models.Model):
     """Dish model."""
 
     name = models.CharField('Названия блюда', max_length=100)
-    category = models.ManyToManyField(Category, related_name='dishes',
-                                      verbose_name='Категория блюда')
+    description = models.TextField('Описание блюда', max_length=1024*6)
+    categories = models.ManyToManyField(Category, related_name='dishes',
+                                        verbose_name='Категория блюда')
     price = models.DecimalField('Цена', max_digits=6, decimal_places=2)
+    weight = models.DecimalField('Вес в граммах', max_digits=6,
+                                 decimal_places=2, null=True, blank=True)
     old_price = models.DecimalField('Цена без скидки', max_digits=6,
                                     decimal_places=2,
                                     null=True, blank=True,
