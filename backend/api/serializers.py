@@ -83,7 +83,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return data
 
     def count_total_price_and_check_dish_values(
-            self, dishes: list[dict]) -> float:
+            self, dishes):
         """Count total price and check the dish values."""
         total_price = 0
 
