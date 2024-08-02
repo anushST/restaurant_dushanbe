@@ -1,6 +1,6 @@
 """Admin-zone of the product app."""
-from django.contrib import admin
-
 from .models import Category, Dish
+from backend.admin_site import my_admin_site
 
-admin.site.register((Category, Dish))
+my_admin_site.register(Category)
+my_admin_site.register(Dish)

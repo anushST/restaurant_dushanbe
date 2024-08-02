@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from cart.models import Cart, CartItem
+from mail.send_mails import send_mail_to_restaurant, send_mail_to_user
 from order.models import Order
 from product.models import Category, Dish
 from restaurant.models import CompanyInfo
@@ -104,8 +105,9 @@ class OrderSerializer(serializers.ModelSerializer):
         total_price = self.count_total_price_and_check_dish_values(dishes)
         order = Order.objects.create(cart=cart, total_price=total_price,
                                      **validated_data)
-
         for dish in dishes:
             CartItem.objects.create(cart=cart, dish_id=dish['dish_id'],
                                     quantity=dish['quantity'])
+        send_mail_to_user(order)
+        send_mail_to_restaurant(order)
         return order

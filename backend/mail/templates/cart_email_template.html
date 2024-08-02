@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <p>Dear {{ order.name }},</p>
+    <p>Here is the summary of your cart:</p>
+    <table border="1">
+        <tr>
+            <th>Dish</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        {% for item in order.cart.items.all %}
+        <tr>
+            <td>{{ item.dish.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.dish.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>Total: {{ order.total_price }}</p>
+</body>
+</html>

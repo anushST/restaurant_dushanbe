@@ -45,8 +45,7 @@ class Order(models.Model):
     def __str__(self):
         """Return the string when calling str() method on this obj."""
         return (f'{self.first_name} '
-                f'{self.last_name if self.last_name else ""} '
-                f'({self.phone}) ({self.email})')
+                f'{self.last_name if self.last_name else ""}')
 
     class Meta():
         """Meta-data of the Order class."""

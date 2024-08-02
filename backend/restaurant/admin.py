@@ -1,6 +1,6 @@
 """Admin-zone of the restaurant app."""
-from django.contrib import admin
+from backend.admin_site import my_admin_site
 
 from .models import CompanyInfo
 
-admin.site.register(CompanyInfo)
+my_admin_site.register(CompanyInfo)
