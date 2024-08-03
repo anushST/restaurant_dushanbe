@@ -3,8 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from cart.models import Cart
-
 
 class Order(models.Model):
     """Order model."""
@@ -20,14 +18,6 @@ class Order(models.Model):
     email = models.EmailField('Email')
     address = models.CharField('Адрес доставки', max_length=256,
                                null=True, blank=True)
-    delivery_address_lat = models.DecimalField('Ширина', max_digits=9,
-                                               decimal_places=6,
-                                               null=True, blank=True)
-    delivery_address_lng = models.DecimalField('Долгота', max_digits=9,
-                                               decimal_places=6,
-                                               null=True, blank=True)
-    cart = models.OneToOneField(Cart, on_delete=models.CASCADE,
-                                verbose_name='Корзина')
     delivery_type = models.CharField('Тип заказа', max_length=10,
                                      choices=DELIVERY_CHOICES)
     total_price = models.DecimalField('Общая цена', max_digits=6,
@@ -35,6 +25,7 @@ class Order(models.Model):
     is_accepted = models.BooleanField('Прнинято?', default=False)
     is_delivered = models.BooleanField('Доставлено?', default=False)
     dishes = models.TextField('Для работы сериализатора', editable=False)
+    created_at = models.DateTimeField('Время создания', auto_now_add=True)
 
     def clean(self) -> None:
         """Validate fields."""

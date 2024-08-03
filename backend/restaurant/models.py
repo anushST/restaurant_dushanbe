@@ -21,6 +21,10 @@ class CompanyInfo(models.Model):
     instagram_link = models.URLField('Instagram ссылка', null=True,
                                      blank=True)
 
+    def __str__(self):
+        """Return the string when calling str() method on this obj."""
+        return 'Информация о компании.'
+
     class Meta():
         """Meta-data of the Cart class."""
 

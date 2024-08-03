@@ -1,6 +1,13 @@
 """Admin-zone fo the cart app."""
-from .models import Cart, CartItem
-from backend.admin_site import my_admin_site
+from django.contrib import admin
 
-my_admin_site.register(Cart)
-my_admin_site.register(CartItem)
+from .models import CartItem
+
+
+class CartItemInline(admin.TabularInline):
+    """Cart item inline class."""
+
+    model = CartItem
+    readonly_fields = ('dish', 'quantity',)
+    can_delete = False
+    extra = 0

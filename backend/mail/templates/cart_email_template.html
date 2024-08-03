@@ -13,7 +13,7 @@
             <th>Quantity</th>
             <th>Price</th>
         </tr>
-        {% for item in order.cart.items.all %}
+        {% for item in order.cart_item_order.all %}
         <tr>
             <td>{{ item.dish.name }}</td>
             <td>{{ item.quantity }}</td>

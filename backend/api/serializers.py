@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from cart.models import Cart, CartItem
+from cart.models import CartItem
 from mail.send_mails import send_mail_to_restaurant, send_mail_to_user
 from order.models import Order
 from product.models import Category, Dish
@@ -101,13 +101,12 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create Order object."""
         dishes = validated_data.pop('dishes')
-        cart = Cart.objects.create()
         total_price = self.count_total_price_and_check_dish_values(dishes)
-        order = Order.objects.create(cart=cart, total_price=total_price,
+        order = Order.objects.create(total_price=total_price,
                                      **validated_data)
         for dish in dishes:
-            CartItem.objects.create(cart=cart, dish_id=dish['dish_id'],
-                                    quantity=dish['quantity'])
+            CartItem.objects.create(dish_id=dish['dish_id'],
+                                    quantity=dish['quantity'], order=order)
         send_mail_to_user(order)
         send_mail_to_restaurant(order)
         return order

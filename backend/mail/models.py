@@ -8,6 +8,10 @@ class EmailToGetConfirmation(models.Model):
     name = models.CharField('Имя', max_length=256)
     email = models.EmailField('Email')
 
+    def __str__(self):
+        """Return the string when calling str() method on this obj."""
+        return f'{self.name}'
+
     class Meta:
         """Meta-data of the EmailToGetConfirmation class."""
 

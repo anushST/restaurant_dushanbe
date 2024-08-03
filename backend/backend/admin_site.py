@@ -21,13 +21,18 @@ class MyAdminSite(AdminSite):
 
         for model in models:
             m_n = model['object_name']
-            if m_n in ['Category', 'Dish', 'Order', 'Cart']:
+            if m_n in ['Category', 'Dish', 'Order',]:
                 restaurant_models.append(model)
             else:
                 other_models.append(model)
 
-        return [{'name': 'Ресторан', 'models': restaurant_models},
-                {'name': 'Служебная информация', 'models': other_models}]
+        sections = []
+        if restaurant_models:
+            sections.append({'name': 'Ресторан', 'models': restaurant_models})
+        if other_models:
+            sections.append({'name': 'Служебная информация',
+                             'models': other_models})
+        return sections
 
 
 my_admin_site = MyAdminSite(name='admin')

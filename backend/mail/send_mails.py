@@ -26,9 +26,7 @@ def send_mail_to_user(order) -> None:
 def send_mail_to_restaurant(order) -> None:
     """Send mail to restaurant."""
     html_content = render_to_string('cart_email_template.html', {
-        'name': order.first_name,
-        'cart': order.cart,
-        'total_price': order.total_price,
+        'order': order
     })
 
     send_mail(
